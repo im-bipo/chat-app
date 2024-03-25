@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Chat Application</h1>
+    <p>Fuuu Uuuuuuu</p>
+    <div>
+      <p>Online Users: <span id="noOfOnlineUsers"></span></p>
+    </div>
+    <input type="text" id="message" />
+    <button id="button" type="button">Send</button>
+    <div id="chats"></div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+      const button = document.getElementById("button");
+
+      socket.on("message", (socket) => {
+        const p = document.createElement("p");
+        p.innerText = socket;
+        document.getElementById("chats").appendChild(p);
+      });
+
+      socket.on("onlineUsers", (noOfusers) => {
+        const currentUsersCount = document.getElementById("noOfOnlineUsers");
+        noOfusers == 1
+          ? (currentUsersCount.innerHTML = noOfusers + "(Only You)")
+          : (currentUsersCount.innerHTML = noOfusers);
+      });
+
+      button.addEventListener("click", () => {
+        const msg = document.getElementById("message");
+        socket.emit("message", msg.value);
+        msg.value = "";
+      });
+    </script>
+  </body>
+</html>
